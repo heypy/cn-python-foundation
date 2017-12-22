@@ -1,14 +1,17 @@
+# -*- coding: utf-8 -*-
 """
 下面的文件将会从csv文件中读取读取短信与电话记录，
 你将在以后的课程中了解更多有关读取文件的知识。
 """
 import csv
+import os
+homedir = os.getcwd()
 
-with open('texts.csv', 'r') as f:
+with open(homedir+'/texts_and_calls/ZH/texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
 
-with open('calls.csv', 'r') as f:
+with open(homedir+'/texts_and_calls/ZH/calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
 
@@ -39,3 +42,22 @@ with open('calls.csv', 'r') as f:
 to other fixed lines in Bangalore."
 注意：百分比应包含2位小数。
 """
+def get_bangalore_call(calls):
+    lists = []
+    for i in calls:
+        if (i[0][:5] == "(080)"):
+            if i[1].find(")") != -1:
+                lists.append(i[1].split(")")[0].replace("(", ""))
+            else:
+                lists.append(i[1].split(" ")[0])
+    
+    return lists
+
+def get_bangalore_call_percent(lists):
+    count = 0
+    for n in lists:
+        if n == "080":
+            count += 1
+    return round(count / len(lists), 2)
+
+print("{} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.".format(get_bangalore_call_percent(get_bangalore_call(calls))))

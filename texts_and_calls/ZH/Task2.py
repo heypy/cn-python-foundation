@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
 """
 下面的文件将会从csv文件中读取读取短信与电话记录，
 你将在以后的课程中了解更多有关读取文件的知识。
 """
 import csv
-with open('texts.csv', 'r') as f:
+import os
+homedir = os.getcwd()
+
+with open(homedir+'/texts_and_calls/ZH/texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
 
-with open('calls.csv', 'r') as f:
+with open(homedir+'/texts_and_calls/ZH/calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
 
@@ -23,3 +27,22 @@ September 2016.".
 如果键不存在于字典内，将此键加入字典，并将它的值设为给定值。
 """
 
+def longest_call(calls):
+    dist = {}
+    for i in calls:
+        if i[0] in dist:
+            dist[i[0]] += int(i[3])
+        else:
+            dist[i[0]] = int(i[3])
+
+        if i[1] in dist:
+            dist[i[1]] += int(i[3])
+        else:
+            dist[i[1]] = int(i[3])
+
+    sortV = [ v for v in sorted(dist.values())]
+    sortK = [ k for k in sorted(dist.keys())]
+    return [sortK[-1], sortV[-1]]
+
+res = longest_call(calls)
+print("{} spent the longest time, {} seconds, on the phone during September 2016.".format(res[0], res[1]))
